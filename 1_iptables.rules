@@ -1,0 +1,119 @@
+Chain INPUT (policy DROP 3362 packets, 968K bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 DROP       tcp  --  any    any     anywhere             anywhere             tcp dpt:ssh state NEW recent: UPDATE seconds: 20 hit_count: 5 name: DEFAULT side: source mask: 255.255.255.255
+    2   128            tcp  --  any    any     anywhere             anywhere             tcp dpt:ssh state NEW recent: SET name: DEFAULT side: source mask: 255.255.255.255
+    0     0 DROP       all  --  any    any     anywhere             anywhere             MAC 00:11:22:33:44:55
+    0     0 DROP       all  --  any    any     224.0.0.0/4          anywhere            
+ 8643  676K ACCEPT     all  --  any    any     anywhere             anywhere             state ESTABLISHED
+    2   128 ACCEPT     tcp  --  any    any     anywhere             anywhere             state NEW tcp dpt:ssh
+    2   100 ACCEPT     tcp  --  any    any     anywhere             anywhere             state NEW tcp dpt:http
+   32  2024 ACCEPT     tcp  --  any    any     anywhere             anywhere             state NEW tcp dpt:https
+    0     0 ACCEPT     all  --  any    any     10.0.0.0/8           anywhere             state NEW
+    0     0 ACCEPT     all  --  any    any     158.108.33.0/24      anywhere             state NEW
+
+Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     all  --  any    any     anywhere             anywhere             ctstate RELATED,ESTABLISHED
+    0     0 ACCEPT     all  --  lo     any     anywhere             anywhere            
+    0     0 FORWARD_direct  all  --  any    any     anywhere             anywhere            
+    0     0 FORWARD_IN_ZONES_SOURCE  all  --  any    any     anywhere             anywhere            
+    0     0 FORWARD_IN_ZONES  all  --  any    any     anywhere             anywhere            
+    0     0 FORWARD_OUT_ZONES_SOURCE  all  --  any    any     anywhere             anywhere            
+    0     0 FORWARD_OUT_ZONES  all  --  any    any     anywhere             anywhere            
+    0     0 DROP       all  --  any    any     anywhere             anywhere             ctstate INVALID
+    0     0 REJECT     all  --  any    any     anywhere             anywhere             reject-with icmp-host-prohibited
+
+Chain OUTPUT (policy DROP 934 packets, 69928 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 DROP       all  --  any    any     224.0.0.0/4          anywhere            
+ 4685  856K ACCEPT     all  --  any    any     anywhere             anywhere             state ESTABLISHED
+    0     0 DROP       tcp  --  any    any     10.0.0.0/8           anywhere             tcp dpt:ftp
+    0     0 DROP       tcp  --  any    any     172.16.0.0/12        anywhere             tcp dpt:ftp
+    0     0 DROP       tcp  --  any    any     192.168.0.0/16       anywhere             tcp dpt:ftp
+    0     0 DROP       tcp  --  any    any     10.0.0.0/8           anywhere             tcp dpt:ftp-data
+    0     0 DROP       tcp  --  any    any     192.168.0.0/16       anywhere             tcp dpt:ftp-data
+    0     0 DROP       tcp  --  any    any     172.16.0.0/12        anywhere             tcp dpt:ftp-data
+
+Chain FORWARD_IN_ZONES (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 FWDI_public  all  --  ens192 any     anywhere             anywhere            [goto] 
+    0     0 FWDI_public  all  --  +      any     anywhere             anywhere            [goto] 
+
+Chain FORWARD_IN_ZONES_SOURCE (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain FORWARD_OUT_ZONES (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 FWDO_public  all  --  any    ens192  anywhere             anywhere            [goto] 
+    0     0 FWDO_public  all  --  any    +       anywhere             anywhere            [goto] 
+
+Chain FORWARD_OUT_ZONES_SOURCE (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain FORWARD_direct (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain FWDI_public (2 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 FWDI_public_log  all  --  any    any     anywhere             anywhere            
+    0     0 FWDI_public_deny  all  --  any    any     anywhere             anywhere            
+    0     0 FWDI_public_allow  all  --  any    any     anywhere             anywhere            
+    0     0 ACCEPT     icmp --  any    any     anywhere             anywhere            
+
+Chain FWDI_public_allow (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain FWDI_public_deny (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain FWDI_public_log (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain FWDO_public (2 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 FWDO_public_log  all  --  any    any     anywhere             anywhere            
+    0     0 FWDO_public_deny  all  --  any    any     anywhere             anywhere            
+    0     0 FWDO_public_allow  all  --  any    any     anywhere             anywhere            
+
+Chain FWDO_public_allow (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain FWDO_public_deny (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain FWDO_public_log (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain INPUT_ZONES (0 references)
+ pkts bytes target     prot opt in     out     source               destination         
+71364   14M IN_public  all  --  ens192 any     anywhere             anywhere            [goto] 
+    1    40 IN_public  all  --  +      any     anywhere             anywhere            [goto] 
+
+Chain INPUT_ZONES_SOURCE (0 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain INPUT_direct (0 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain IN_public (2 references)
+ pkts bytes target     prot opt in     out     source               destination         
+71365   14M IN_public_log  all  --  any    any     anywhere             anywhere            
+71365   14M IN_public_deny  all  --  any    any     anywhere             anywhere            
+71365   14M IN_public_allow  all  --  any    any     anywhere             anywhere            
+  128  4215 ACCEPT     icmp --  any    any     anywhere             anywhere            
+
+Chain IN_public_allow (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    4   224 ACCEPT     tcp  --  any    any     anywhere             anywhere             tcp dpt:ssh ctstate NEW,UNTRACKED
+  205 10104 ACCEPT     tcp  --  any    any     anywhere             anywhere             tcp dpt:http ctstate NEW,UNTRACKED
+  575 24432 ACCEPT     tcp  --  any    any     anywhere             anywhere             tcp dpt:https ctstate NEW,UNTRACKED
+    2    80 ACCEPT     tcp  --  any    any     anywhere             anywhere             tcp dpt:armtechdaemon ctstate NEW,UNTRACKED
+
+Chain IN_public_deny (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain IN_public_log (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain OUTPUT_direct (0 references)
+ pkts bytes target     prot opt in     out     source               destination         
